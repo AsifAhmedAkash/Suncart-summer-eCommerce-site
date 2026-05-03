@@ -1,8 +1,8 @@
 // import React from 'react';
-import HeroSection from './components/HeroSection';
-import PopularProducts from './components/PopularProducts';
+import HeroSection from '@/app/(main)/home/components/HeroSection';
+import PopularProducts from '@/app/(main)/home/components/PopularProducts';
 // import Extra from './components/extra';
-import ExtraSection from './components/ExtraSection';
+import ExtraSection from '@/app/(main)/home/components/ExtraSection';
 
 const HomePage = async () => {
     const res = await fetch("https://suncare-dataset-server.onrender.com/products");
