@@ -4,17 +4,22 @@ import PopularProducts from './components/PopularProducts';
 // import Extra from './components/extra';
 import ExtraSection from './components/ExtraSection';
 
-const HomePage = () => {
+const HomePage = async () => {
+    const res = await fetch("https://suncare-dataset-server.onrender.com/products");
+    const products = await res.json();
+    const popularProducts = [...products]
+        .sort((a, b) => b.rating - a.rating)
+        .slice(0, 3);
+
+    // console.log("Fetched products:", products);
+    console.log("Popular products: ", popularProducts);
+
+
     return (
         <div>
-            this is home page
-
             <HeroSection />
-
-            <PopularProducts />
-
+            <PopularProducts products={popularProducts} />
             <ExtraSection />
-
         </div>
     );
 };

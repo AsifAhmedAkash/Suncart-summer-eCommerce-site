@@ -1,5 +1,6 @@
 // import React from 'react';
 import Link from "next/link";
+import Image from "next/image";
 import { FaRegStar } from "react-icons/fa";
 import { FaChevronRight } from "react-icons/fa";
 
@@ -12,10 +13,20 @@ import { FaChevronRight } from "react-icons/fa";
 // Price
 // View Details button
 
-// api: PRODUCT_API = "https://suncare-dataset-server.onrender.com"
+// api: PRODUCT_API = "https://suncare-dataset-server.onrender.com/products"
+// {
+//     "id": "1",
+//     "name": "UV Protection Sunglasses",
+//     "brand": "SunShade",
+//     "price": 15,
+//     "rating": 4.7,
+//     "stock": 10,
+//     "description": "Stylish UV protection sunglasses perfect for summer outings.",
+//     "image": "https://ibb.co.com/RpNy8cwy",
+//     "category": "Accessories"
+// }
 
-
-const PopularProducts = () => {
+const PopularProducts = ({ products }) => {
     return (
         <section className="px-6 md:px-12 py-20 max-w-7xl mx-auto">
             {/* Header */}
@@ -39,12 +50,20 @@ const PopularProducts = () => {
             {/* Product Grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {products.map((product) => (
-                    <div key={product.id} className="group">
+
+                    console.log("Popular product: ", product),
+
+                    < div key={product.id} className="group" >
                         <div className="bg-white rounded-xl overflow-hidden border border-teal-50/50 transition-all hover:shadow-lg hover:-translate-y-1 duration-300">
                             {/* Image */}
                             <div className="aspect-square bg-[#E0F2F1] relative overflow-hidden">
-                                {/* use next img here from api */}
-
+                                {/* console.log(product.image); */}
+                                <Image
+                                    src={product.image}
+                                    alt={product.name}
+                                    layout="fill"
+                                    objectFit="cover"
+                                />
                                 {product.badge && (
                                     <div className="absolute top-4 left-4">
                                         <span className="bg-white/90 backdrop-blur-md px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest text-[#003D4C] shadow-sm">
@@ -79,7 +98,7 @@ const PopularProducts = () => {
                     </div>
                 ))}
             </div>
-        </section>
+        </section >
     );
 };
 

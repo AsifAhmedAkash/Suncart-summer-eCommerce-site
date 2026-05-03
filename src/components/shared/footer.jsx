@@ -10,7 +10,12 @@ import Link from "next/link";
 // Social links
 // Privacy policy
 
-
+const navLinks = [
+    { label: "Contact Us", href: "#" },
+    { label: "Privacy Policy", href: "#" },
+    { label: "Shipping Info", href: "#" },
+    { label: "Terms of Service", href: "#" },
+];
 
 const Footer = () => {
     return (
