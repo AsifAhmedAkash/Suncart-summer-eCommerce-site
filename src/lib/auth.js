@@ -13,4 +13,9 @@ export const auth = betterAuth({
     emailAndPassword: {
         enabled: true,
     },
+    trustedOrigins: [
+        "http://localhost:3000",
+        process.env.BETTER_AUTH_URL,
+        process.env.NEXT_PUBLIC_APP_URL,
+    ].filter(Boolean),
 });
