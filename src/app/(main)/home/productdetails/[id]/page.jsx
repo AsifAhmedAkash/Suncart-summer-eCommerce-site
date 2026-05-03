@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { FaStar, FaArrowLeft, FaShoppingCart, FaCheckCircle } from "react-icons/fa";
 import Image from "next/image";
+import { auth } from "@/lib/auth";
+import { headers } from "next/headers";
+import { redirect } from "next/navigation";
 
 const PRODUCT_API = "https://suncare-dataset-server.onrender.com/products";
 
@@ -12,6 +15,14 @@ const PRODUCT_API = "https://suncare-dataset-server.onrender.com/products";
 // Full product details in this page nicely
 
 const ProductDetailsPage = async ({ params }) => {
+    const session = await auth.api.getSession({
+        headers: await headers()
+    });
+
+    if (!session) {
+        redirect("/login");
+    }
+
     const res = await fetch(PRODUCT_API, { cache: "no-store" });
     const products = await res.json();
     const resolvedParams = await params;

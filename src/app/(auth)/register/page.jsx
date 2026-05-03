@@ -3,6 +3,9 @@
 import Link from "next/link";
 import { FaArrowRight, FaUser, FaEnvelope, FaImage, FaLock } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
+import { useState } from "react";
+import { signUp } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 // 📝 Register Page
 // Create a register page with a form , so that the user can register himself in this application. 
@@ -23,9 +26,30 @@ import { FcGoogle } from "react-icons/fc";
 
 
 const RegisterPage = () => {
-    const handleSubmit = (e) => {
+    const [name, setName] = useState("");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [photoUrl, setPhotoUrl] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const router = useRouter();
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // handle register logic here
+        setLoading(true);
+        setError(null);
+        const { data, error } = await signUp.email({
+            email,
+            password,
+            name,
+            image: photoUrl || undefined,
+        });
+        setLoading(false);
+        if (error) {
+            setError(error.message || "Something went wrong.");
+        } else {
+            router.push("/login");
+        }
     };
 
     return (
@@ -57,9 +81,14 @@ const RegisterPage = () => {
                         <h1 className="text-4xl font-bold font-manrope text-[#002630] mb-2">
                             Create Account
                         </h1>
-                        <p className="text-slate-500 text-sm">
+                        <p className="text-slate-500 text-sm mb-4">
                             Purity in every step of your wellness experience.
                         </p>
+                        {error && (
+                            <div className="bg-red-50 text-red-500 p-3 rounded-lg text-sm font-semibold border border-red-100">
+                                {error}
+                            </div>
+                        )}
                     </div>
 
                     <form onSubmit={handleSubmit} className="space-y-4">
@@ -72,7 +101,7 @@ const RegisterPage = () => {
                             </label>
                             <label className="input input-bordered flex items-center gap-3 rounded-xl border-slate-200 focus-within:border-[#396666] focus-within:ring-1 focus-within:ring-[#396666]">
                                 <FaUser size={13} className="text-slate-400" />
-                                <input type="text" placeholder="Jane Doe" className="grow" required />
+                                <input type="text" placeholder="Jane Doe" className="grow" required value={name} onChange={(e) => setName(e.target.value)} />
                             </label>
                         </div>
 
@@ -85,7 +114,7 @@ const RegisterPage = () => {
                             </label>
                             <label className="input input-bordered flex items-center gap-3 rounded-xl border-slate-200 focus-within:border-[#396666] focus-within:ring-1 focus-within:ring-[#396666]">
                                 <FaEnvelope size={13} className="text-slate-400" />
-                                <input type="email" placeholder="jane@example.com" className="grow" required />
+                                <input type="email" placeholder="jane@example.com" className="grow" required value={email} onChange={(e) => setEmail(e.target.value)} />
                             </label>
                         </div>
 
@@ -98,7 +127,7 @@ const RegisterPage = () => {
                             </label>
                             <label className="input input-bordered flex items-center gap-3 rounded-xl border-slate-200 focus-within:border-[#396666] focus-within:ring-1 focus-within:ring-[#396666]">
                                 <FaImage size={13} className="text-slate-400" />
-                                <input type="url" placeholder="https://image-link.com/avatar.jpg" className="grow" />
+                                <input type="url" placeholder="https://image-link.com/avatar.jpg" className="grow" value={photoUrl} onChange={(e) => setPhotoUrl(e.target.value)} />
                             </label>
                         </div>
 
@@ -111,7 +140,7 @@ const RegisterPage = () => {
                             </label>
                             <label className="input input-bordered flex items-center gap-3 rounded-xl border-slate-200 focus-within:border-[#396666] focus-within:ring-1 focus-within:ring-[#396666]">
                                 <FaLock size={13} className="text-slate-400" />
-                                <input type="password" placeholder="••••••••" className="grow" required />
+                                <input type="password" placeholder="••••••••" className="grow" required value={password} onChange={(e) => setPassword(e.target.value)} />
                             </label>
                         </div>
 
@@ -119,10 +148,11 @@ const RegisterPage = () => {
                         <div className="pt-2">
                             <button
                                 type="submit"
-                                className="btn w-full bg-[#003D4C] text-white border-none hover:bg-[#002630] normal-case font-manrope font-semibold rounded-xl gap-2"
+                                disabled={loading}
+                                className="btn w-full bg-[#003D4C] text-white border-none hover:bg-[#002630] normal-case font-manrope font-semibold rounded-xl gap-2 disabled:opacity-70"
                             >
-                                Register
-                                <FaArrowRight size={14} />
+                                {loading ? "Registering..." : "Register"}
+                                {!loading && <FaArrowRight size={14} />}
                             </button>
                         </div>
                     </form>

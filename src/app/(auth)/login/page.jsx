@@ -3,6 +3,9 @@
 import Link from "next/link";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
+import { useState } from "react";
+import { signIn } from "@/lib/auth-client";
+import { useRouter } from "next/navigation";
 
 // 🔐 Login Page
 // The user will  show  a Login page with a form , so that the user can Log in this application. 
@@ -21,9 +24,26 @@ import { FcGoogle } from "react-icons/fc";
 
 
 const LoginPage = () => {
-    const handleSubmit = (e) => {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
+    const router = useRouter();
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // handle login logic here
+        setLoading(true);
+        setError(null);
+        const { data, error } = await signIn.email({
+            email,
+            password,
+        });
+        setLoading(false);
+        if (error) {
+            setError(error.message || "Invalid credentials.");
+        } else {
+            router.push("/home");
+        }
     };
 
     return (
@@ -59,9 +79,14 @@ const LoginPage = () => {
                             <h1 className="text-4xl font-bold font-manrope text-[#003D4C] mb-2">
                                 Welcome Back
                             </h1>
-                            <p className="text-sm text-slate-500">
+                            <p className="text-sm text-slate-500 mb-4">
                                 Please enter your details to access your account.
                             </p>
+                            {error && (
+                                <div className="bg-red-50 text-red-500 p-3 rounded-lg text-sm font-semibold border border-red-100">
+                                    {error}
+                                </div>
+                            )}
                         </div>
 
                         <form onSubmit={handleSubmit} className="space-y-4">
@@ -79,6 +104,8 @@ const LoginPage = () => {
                                         placeholder="name@example.com"
                                         className="grow"
                                         required
+                                        value={email}
+                                        onChange={(e) => setEmail(e.target.value)}
                                     />
                                 </label>
                             </div>
@@ -100,6 +127,8 @@ const LoginPage = () => {
                                         placeholder="••••••••"
                                         className="grow"
                                         required
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
                                     />
                                 </label>
                             </div>
@@ -108,9 +137,10 @@ const LoginPage = () => {
                             <div className="pt-2">
                                 <button
                                     type="submit"
-                                    className="btn w-full bg-[#003D4C] text-white border-none hover:bg-[#002630] normal-case font-manrope font-semibold rounded-xl shadow-md"
+                                    disabled={loading}
+                                    className="btn w-full bg-[#003D4C] text-white border-none hover:bg-[#002630] normal-case font-manrope font-semibold rounded-xl shadow-md disabled:opacity-70"
                                 >
-                                    Login
+                                    {loading ? "Logging in..." : "Login"}
                                 </button>
                             </div>
                         </form>
