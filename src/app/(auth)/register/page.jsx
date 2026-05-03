@@ -4,47 +4,32 @@ import Link from "next/link";
 import { FaArrowRight, FaUser, FaEnvelope, FaImage, FaLock } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { useState } from "react";
-import { signUp } from "@/lib/auth-client";
+import { useForm } from "react-hook-form";
+import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 
-// 📝 Register Page
-// Create a register page with a form , so that the user can register himself in this application. 
-// Show a Title for registration and a Form with following fields
-// ( Name , Email, Photo-url(link), Password & Register Button ) 
-
-// If the user Register successfully then 
-// navigate him to his login page.
-// If not, show him an error with toast / error message anywhere in the form.
-
-
-// There will be some other options like 
-// Show the user a Link for Login so that he can go to the Login page. 
-// Show users a Social Login Button ( Google only ) . on Clicking it 
-// user authenticate with Google
-// Navigate the user to the Home page.
-
-
-
 const RegisterPage = () => {
-    const [name, setName] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [photoUrl, setPhotoUrl] = useState("");
+    const { register, handleSubmit, formState: { errors } } = useForm();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const router = useRouter();
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleRegisterFunc = async (data) => {
+        console.log("Registration form submitted");
         setLoading(true);
         setError(null);
-        const { data, error } = await signUp.email({
-            email,
-            password,
-            name,
-            image: photoUrl || undefined,
+
+        const { data: res, error } = await authClient.signUp.email({
+            name: data.name,
+            email: data.email,
+            password: data.password,
+            image: data.photoUrl || undefined,
+            callbackURL: "/login",
         });
+
+        console.log("Sign-up response:", { data: res, error });
         setLoading(false);
+
         if (error) {
             setError(error.message || "Something went wrong.");
         } else {
@@ -91,7 +76,7 @@ const RegisterPage = () => {
                         )}
                     </div>
 
-                    <form onSubmit={handleSubmit} className="space-y-4">
+                    <form onSubmit={handleSubmit(handleRegisterFunc)} className="space-y-4">
                         {/* Name */}
                         <div className="form-control">
                             <label className="label pt-0 pb-1">
@@ -101,8 +86,16 @@ const RegisterPage = () => {
                             </label>
                             <label className="input input-bordered flex items-center gap-3 rounded-xl border-slate-200 focus-within:border-[#396666] focus-within:ring-1 focus-within:ring-[#396666]">
                                 <FaUser size={13} className="text-slate-400" />
-                                <input type="text" placeholder="Jane Doe" className="grow" required value={name} onChange={(e) => setName(e.target.value)} />
+                                <input
+                                    type="text"
+                                    placeholder="Jane Doe"
+                                    className="grow"
+                                    {...register("name", { required: "Name is required" })}
+                                />
                             </label>
+                            {errors.name && (
+                                <p className="text-red-500 text-xs mt-1">{errors.name.message}</p>
+                            )}
                         </div>
 
                         {/* Email */}
@@ -114,8 +107,16 @@ const RegisterPage = () => {
                             </label>
                             <label className="input input-bordered flex items-center gap-3 rounded-xl border-slate-200 focus-within:border-[#396666] focus-within:ring-1 focus-within:ring-[#396666]">
                                 <FaEnvelope size={13} className="text-slate-400" />
-                                <input type="email" placeholder="jane@example.com" className="grow" required value={email} onChange={(e) => setEmail(e.target.value)} />
+                                <input
+                                    type="email"
+                                    placeholder="jane@example.com"
+                                    className="grow"
+                                    {...register("email", { required: "Email is required" })}
+                                />
                             </label>
+                            {errors.email && (
+                                <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
+                            )}
                         </div>
 
                         {/* Photo URL */}
@@ -127,7 +128,12 @@ const RegisterPage = () => {
                             </label>
                             <label className="input input-bordered flex items-center gap-3 rounded-xl border-slate-200 focus-within:border-[#396666] focus-within:ring-1 focus-within:ring-[#396666]">
                                 <FaImage size={13} className="text-slate-400" />
-                                <input type="url" placeholder="https://image-link.com/avatar.jpg" className="grow" value={photoUrl} onChange={(e) => setPhotoUrl(e.target.value)} />
+                                <input
+                                    type="url"
+                                    placeholder="https://image-link.com/avatar.jpg"
+                                    className="grow"
+                                    {...register("photoUrl")}
+                                />
                             </label>
                         </div>
 
@@ -140,8 +146,16 @@ const RegisterPage = () => {
                             </label>
                             <label className="input input-bordered flex items-center gap-3 rounded-xl border-slate-200 focus-within:border-[#396666] focus-within:ring-1 focus-within:ring-[#396666]">
                                 <FaLock size={13} className="text-slate-400" />
-                                <input type="password" placeholder="••••••••" className="grow" required value={password} onChange={(e) => setPassword(e.target.value)} />
+                                <input
+                                    type="password"
+                                    placeholder="••••••••"
+                                    className="grow"
+                                    {...register("password", { required: "Password is required", minLength: { value: 8, message: "Password must be at least 8 characters" } })}
+                                />
                             </label>
+                            {errors.password && (
+                                <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>
+                            )}
                         </div>
 
                         {/* Submit */}

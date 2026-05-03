@@ -4,41 +4,31 @@ import Link from "next/link";
 import { FaEnvelope, FaLock } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { useState } from "react";
-import { signIn } from "@/lib/auth-client";
+import { useForm } from "react-hook-form";
+import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
 
-// 🔐 Login Page
-// The user will  show  a Login page with a form , so that the user can Log in this application. 
-// Show a Title for Login.  & Form with following fields 
-// ( Email , Password , Login button ) 
-
-// If the user Login successfully then 
-// navigate him to his Home page.
-// If not, show him an error with toast / error message anywhere in the form.
-
-// There will be some other options like 
-// Show the user a Link for Register  so that he can go to the register page. 
-// Show users a Social Login Button ( Google only ) . on Clicking it 
-// user authenticate with Google
-//  Navigate him to  his Home page.
-
-
 const LoginPage = () => {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
+    const { register, handleSubmit, formState: { errors } } = useForm();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
     const router = useRouter();
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+    const handleLoginFunc = async (data) => {
+        console.log("Login form submitted");
         setLoading(true);
         setError(null);
-        const { data, error } = await signIn.email({
-            email,
-            password,
+
+        const { data: res, error } = await authClient.signIn.email({
+            email: data.email,
+            password: data.password,
+            rememberMe: true,
+            callbackURL: "/home",
         });
+
+        console.log("Sign-in response:", { data: res, error });
         setLoading(false);
+
         if (error) {
             setError(error.message || "Invalid credentials.");
         } else {
@@ -89,7 +79,7 @@ const LoginPage = () => {
                             )}
                         </div>
 
-                        <form onSubmit={handleSubmit} className="space-y-4">
+                        <form onSubmit={handleSubmit(handleLoginFunc)} className="space-y-4">
                             {/* Email */}
                             <div className="form-control">
                                 <label className="label pt-0 pb-1">
@@ -103,11 +93,12 @@ const LoginPage = () => {
                                         type="email"
                                         placeholder="name@example.com"
                                         className="grow"
-                                        required
-                                        value={email}
-                                        onChange={(e) => setEmail(e.target.value)}
+                                        {...register("email", { required: "Email is required" })}
                                     />
                                 </label>
+                                {errors.email && (
+                                    <p className="text-red-500 text-xs mt-1">{errors.email.message}</p>
+                                )}
                             </div>
 
                             {/* Password */}
@@ -126,11 +117,12 @@ const LoginPage = () => {
                                         type="password"
                                         placeholder="••••••••"
                                         className="grow"
-                                        required
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
+                                        {...register("password", { required: "Password is required" })}
                                     />
                                 </label>
+                                {errors.password && (
+                                    <p className="text-red-500 text-xs mt-1">{errors.password.message}</p>
+                                )}
                             </div>
 
                             {/* Submit */}
