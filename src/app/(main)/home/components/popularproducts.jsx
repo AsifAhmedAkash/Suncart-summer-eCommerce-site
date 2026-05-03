@@ -40,7 +40,7 @@ const PopularProducts = ({ products }) => {
                     </h2>
                 </div>
                 <Link
-                    href="#"
+                    href="/home/allproducts"
                     className="text-[#003D4C] font-semibold text-sm flex items-center gap-1 hover:underline"
                 >
                     View All Products <FaChevronRight size={18} />
@@ -51,8 +51,6 @@ const PopularProducts = ({ products }) => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                 {products.map((product) => (
 
-                    console.log("Popular product: ", product),
-
                     < div key={product.id} className="group" >
                         <div className="bg-white rounded-xl overflow-hidden border border-teal-50/50 transition-all hover:shadow-lg hover:-translate-y-1 duration-300">
                             {/* Image */}
@@ -61,8 +59,8 @@ const PopularProducts = ({ products }) => {
                                 <Image
                                     src={product.image}
                                     alt={product.name}
-                                    layout="fill"
-                                    objectFit="cover"
+                                    fill
+                                    className="object-cover"
                                 />
                                 {product.badge && (
                                     <div className="absolute top-4 left-4">
@@ -90,9 +88,9 @@ const PopularProducts = ({ products }) => {
                                 <p className="text-[#003D4C] font-bold text-lg mb-6">
                                     {product.price}
                                 </p>
-                                <button className="btn btn-outline w-full border-[#003D4C] text-[#003D4C] hover:bg-[#003D4C] hover:text-white hover:border-[#003D4C] rounded-lg font-manrope font-semibold text-sm normal-case transition-colors">
+                                <Link href={`/home/productdetails/${product.id}`} className="btn btn-outline w-full border-[#003D4C] text-[#003D4C] hover:bg-[#003D4C] hover:text-white hover:border-[#003D4C] rounded-lg font-manrope font-semibold text-sm normal-case transition-colors flex items-center justify-center">
                                     View Details
-                                </button>
+                                </Link>
                             </div>
                         </div>
                     </div>

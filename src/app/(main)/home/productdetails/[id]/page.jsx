@@ -14,7 +14,8 @@ const PRODUCT_API = "https://suncare-dataset-server.onrender.com/products";
 const ProductDetailsPage = async ({ params }) => {
     const res = await fetch(PRODUCT_API, { cache: "no-store" });
     const products = await res.json();
-    const product = products.find((p) => p.id === params.id);
+    const resolvedParams = await params;
+    const product = products.find((p) => p.id === resolvedParams.id);
 
 
     return (
@@ -34,12 +35,12 @@ const ProductDetailsPage = async ({ params }) => {
             {/* Card */}
             <div className="card lg:card-side bg-white shadow-lg border border-teal-50 rounded-2xl overflow-hidden">
                 {/* Image Side */}
-                <div className="lg:w-1/2 bg-[#E0F2F1] flex items-center justify-center p-10 min-h-[400px]">
+                <div className="lg:w-1/2 bg-[#E0F2F1] relative flex items-center justify-center p-10 min-h-[400px]">
                     <Image
                         src={product.image}
                         alt={product.name}
-                        layout="fill"
-                        objectFit="cover"
+                        fill
+                        className="object-cover"
                     />
                 </div>
 

@@ -2,6 +2,7 @@
 'use client';
 import { FaArrowRight } from "react-icons/fa";
 import { FaFireFlameCurved } from "react-icons/fa6";
+import Link from "next/link";
 // 🌅 Hero Section
 // Summer sale banner / slider
 // Highlight offers like:
@@ -35,9 +36,9 @@ const heroSection = () => {
                             Rejuvenate your routine with our curated seasonal essentials. Pure,
                             organic, and clinically tested for your best summer yet.
                         </p>
-                        <button className="btn bg-white text-[#003D4C] border-none hover:bg-teal-50 px-8 py-3 rounded-lg font-manrope font-semibold text-sm w-fit transition-transform active:scale-95 normal-case">
+                        <Link href="/home/allproducts" className="btn bg-white text-[#003D4C] border-none hover:bg-teal-50 px-8 py-3 rounded-lg font-manrope font-semibold text-sm w-fit transition-transform active:scale-95 normal-case inline-flex items-center justify-center">
                             Shop the Collection
-                        </button>
+                        </Link>
                     </div>
                 </div>
 
@@ -53,13 +54,13 @@ const heroSection = () => {
                                 Bio-available vitamins for daily resilience.
                             </p>
                         </div>
-                        <button className="relative z-10 text-[#396666] font-semibold text-sm flex items-center gap-2 group w-fit hover:gap-3 transition-all">
+                        <Link href="/home/allproducts" className="relative z-10 text-[#396666] font-semibold text-sm flex items-center gap-2 group w-fit hover:gap-3 transition-all">
                             Explore Now{" "}
                             <FaArrowRight
                                 size={16}
                                 className="transition-transform group-hover:translate-x-1"
                             />
-                        </button>
+                        </Link>
                         <span className="absolute -bottom-4 -right-4 text-[120px] opacity-10 text-[#396666] select-none leading-none">
                             💊
                         </span>
@@ -75,13 +76,13 @@ const heroSection = () => {
                                 Mindful journaling for a peaceful start.
                             </p>
                         </div>
-                        <button className="relative z-10 text-[#003D4C] font-semibold text-sm flex items-center gap-2 group w-fit hover:gap-3 transition-all">
+                        <Link href="/home/allproducts" className="relative z-10 text-[#003D4C] font-semibold text-sm flex items-center gap-2 group w-fit hover:gap-3 transition-all">
                             View Rituals{" "}
                             <FaArrowRight
                                 size={16}
                                 className="transition-transform group-hover:translate-x-1"
                             />
-                        </button>
+                        </Link>
                         <span className="absolute -bottom-4 -right-4 text-[120px] opacity-5 text-[#003D4C] select-none leading-none">
                             📖
                         </span>

@@ -63,8 +63,8 @@ const AllProductsPage = async () => {
                             <Image
                                 src={product.image}
                                 alt={product.name}
-                                layout="fill"
-                                objectFit="cover"
+                                fill
+                                className="object-cover"
                             />
                             {product.stock <= 5 && (
                                 <div className="absolute top-3 right-3">
@@ -96,10 +96,8 @@ const AllProductsPage = async () => {
                                 <span className="font-bold text-lg text-[#003D4C]">
                                     ${product.price}
                                 </span>
-                                <Link href={`/home/productdetails/${product.id}`}>
-                                    <button className="bg-[#003D4C] text-white px-4 py-2 rounded-lg text-[10px] font-bold uppercase tracking-wider hover:opacity-90 transition-all">
-                                        View Details
-                                    </button>
+                                <Link href={`/home/productdetails/${product.id}`} className="bg-[#003D4C] text-white px-4 py-2 rounded-lg text-[10px] font-bold uppercase tracking-wider hover:opacity-90 transition-all text-center">
+                                    View Details
                                 </Link>
                             </div>
                         </div>
