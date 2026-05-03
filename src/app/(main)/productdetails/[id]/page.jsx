@@ -7,7 +7,7 @@ import React from 'react';
 // Show:
 // Full product details in this page nicely
 
-const ProductDetailsPage = () => {
+const ProductDetailsPage = ({ params }) => {
     return (
         <div>
             This is product details page

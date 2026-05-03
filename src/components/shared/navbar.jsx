@@ -26,19 +26,19 @@ const Navbar = () => {
                 {/* Navigation Links */}
                 <div className="hidden md:flex items-center gap-8 text-sm font-medium font-manrope tracking-tight">
                     <Link
-                        href="#"
+                        href="/home"
                         className="text-[#003D4C] border-b-2 border-[#003D4C] pb-1"
                     >
                         Home
                     </Link>
                     <Link
-                        href="#"
+                        href="/home/allproducts"
                         className="text-slate-500 hover:text-[#003D4C] transition-colors"
                     >
                         Products
                     </Link>
                     <Link
-                        href="#"
+                        href="/myprofile"
                         className="text-slate-500 hover:text-[#003D4C] transition-colors"
                     >
                         My Profile
