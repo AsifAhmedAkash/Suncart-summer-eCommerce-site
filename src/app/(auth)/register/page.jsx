@@ -55,10 +55,10 @@ const RegisterPage = () => {
                         className="absolute inset-0 w-full h-full object-cover"
                     />
                     <div className="absolute bottom-12 left-10 right-10 z-20">
-                        <h2 className="text-2xl font-bold font-manrope text-[#003D4C] mb-3 leading-snug">
+                        <h2 className="text-2xl font-bold font-manrope text-[#85bac7] mb-3 leading-snug">
                             A breath of fresh air in your health journey.
                         </h2>
-                        <p className="text-sm text-slate-600 leading-relaxed">
+                        <p className="text-sm text-slate-100 leading-relaxed">
                             Join a community of health-conscious consumers who value
                             transparency and premium clinical efficacy.
                         </p>

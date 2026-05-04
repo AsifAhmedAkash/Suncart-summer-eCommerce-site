@@ -1,11 +1,5 @@
-import React from 'react';
+import "animate.css";
 
-
-// ➕ Extra Sections
-// “Summer Care Tips” (e.g., skincare, hydration tips)
-// “Top Brands” (3–4 static brand cards)
-
-//using tips and brands as static data for now, later from api
 const tips = [
     {
         icon: "🌿",
@@ -33,8 +27,8 @@ const ExtraSection = () => {
         <section className="bg-[#f2f4f4] py-20">
             <div className="px-6 md:px-12 max-w-7xl mx-auto">
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-                    {/* Summer Care Tips */}
-                    <div>
+                    {/* Summer Care Tips — slides in from left */}
+                    <div className="animate__animated animate__fadeInLeft">
                         <span className="text-xs font-bold uppercase tracking-widest text-[#396666] mb-4 block">
                             Seasonal Wellness
                         </span>
@@ -63,8 +57,8 @@ const ExtraSection = () => {
                         </div>
                     </div>
 
-                    {/* Top Brands */}
-                    <div className="bg-white p-12 rounded-2xl border border-teal-100/50">
+                    {/* Top Brands — slides in from right */}
+                    <div className="animate__animated animate__fadeInRight animate__delay-1s bg-white p-12 rounded-2xl border border-teal-100/50">
                         <h3 className="text-center font-manrope font-bold text-slate-400 uppercase tracking-[0.2em] text-xs mb-12">
                             Top Brands
                         </h3>
