@@ -7,17 +7,15 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 const RegisterPage = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
     const router = useRouter();
 
     const handleRegisterFunc = async (data) => {
-        console.log("Registration form submitted");
         setLoading(true);
-        setError(null);
 
         const { data: res, error } = await authClient.signUp.email({
             name: data.name,
@@ -27,29 +25,28 @@ const RegisterPage = () => {
             callbackURL: "/login",
         });
 
-        console.log("Sign-up response:", { data: res, error });
         setLoading(false);
 
         if (error) {
-            setError(error.message || "Something went wrong.");
+            toast.error(error.message || "Something went wrong.");
         } else {
-            router.push("/login");
+            toast.success("Account created! Redirecting to login...");
+            setTimeout(() => router.push("/login"), 1500);
         }
     };
 
     const handleGoogleSignin = async () => {
-        const data = await authClient.signIn.social({
-            provider: "google",
-        });
-        console.log("Google sign-in response:", data);
-
-    }
+        try {
+            await authClient.signIn.social({ provider: "google" });
+        } catch (err) {
+            toast.error("Google sign-in failed. Try again.");
+        }
+    };
 
     return (
         <main className="min-h-screen flex items-center justify-center px-6 py-20 bg-[#f8fafa]">
             <div className="w-full max-w-5xl grid md:grid-cols-2 bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-sm">
 
-                {/* Left - Image Side */}
                 <div className="hidden md:block relative min-h-[600px]">
                     <div className="absolute inset-0 bg-gradient-to-br from-[#003D4C]/20 to-[#bcebeb]/10 z-10" />
                     <img
@@ -68,20 +65,14 @@ const RegisterPage = () => {
                     </div>
                 </div>
 
-                {/* Right - Form Side */}
                 <div className="p-10 md:p-12 flex flex-col justify-center">
                     <div className="mb-8">
                         <h1 className="text-4xl font-bold font-manrope text-[#002630] mb-2">
                             Create Account
                         </h1>
-                        <p className="text-slate-500 text-sm mb-4">
+                        <p className="text-slate-500 text-sm">
                             Purity in every step of your wellness experience.
                         </p>
-                        {error && (
-                            <div className="bg-red-50 text-red-500 p-3 rounded-lg text-sm font-semibold border border-red-100">
-                                {error}
-                            </div>
-                        )}
                     </div>
 
                     <form onSubmit={handleSubmit(handleRegisterFunc)} className="space-y-4">
@@ -145,7 +136,6 @@ const RegisterPage = () => {
                             </label>
                         </div>
 
-                        {/* Password */}
                         <div className="form-control">
                             <label className="label pt-0 pb-1">
                                 <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">
@@ -158,7 +148,10 @@ const RegisterPage = () => {
                                     type="password"
                                     placeholder="••••••••"
                                     className="grow"
-                                    {...register("password", { required: "Password is required", minLength: { value: 8, message: "Password must be at least 8 characters" } })}
+                                    {...register("password", {
+                                        required: "Password is required",
+                                        minLength: { value: 8, message: "Password must be at least 8 characters" }
+                                    })}
                                 />
                             </label>
                             {errors.password && (
@@ -166,7 +159,6 @@ const RegisterPage = () => {
                             )}
                         </div>
 
-                        {/* Submit */}
                         <div className="pt-2">
                             <button
                                 type="submit"
@@ -179,12 +171,10 @@ const RegisterPage = () => {
                         </div>
                     </form>
 
-                    {/* Divider */}
                     <div className="divider text-[10px] font-bold uppercase tracking-widest text-slate-400 my-6">
                         or
                     </div>
 
-                    {/* Google */}
                     <button
                         className="btn btn-outline border-slate-200 hover:bg-slate-50 hover:border-slate-300 normal-case font-manrope font-semibold rounded-xl gap-3 text-[#002630]"
                         onClick={handleGoogleSignin}
@@ -193,7 +183,6 @@ const RegisterPage = () => {
                         Continue with Google
                     </button>
 
-                    {/* Login link */}
                     <p className="mt-8 text-center text-sm text-slate-500">
                         Already have an account?{" "}
                         <Link href="/login" className="text-[#003D4C] font-bold hover:underline">

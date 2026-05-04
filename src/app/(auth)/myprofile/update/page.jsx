@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useSession, authClient } from "@/lib/auth-client";
 import Link from "next/link";
 import { FaUser, FaImage, FaSave, FaArrowLeft } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 const UpdateProfilePage = () => {
     const { data: session, isPending } = useSession();
@@ -13,8 +14,6 @@ const UpdateProfilePage = () => {
     const [form, setForm] = useState({ name: "", image: "" });
     const [initialized, setInitialized] = useState(false);
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState("");
-    const [success, setSuccess] = useState(false);
 
     useEffect(() => {
         if (!isPending && !session) {
@@ -44,13 +43,12 @@ const UpdateProfilePage = () => {
 
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
-        setError("");
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!form.name.trim()) {
-            setError("Name cannot be empty.");
+            toast.error("Name cannot be empty.");
             return;
         }
         setLoading(true);
@@ -59,10 +57,10 @@ const UpdateProfilePage = () => {
                 name: form.name,
                 image: form.image,
             });
-            setSuccess(true);
+            toast.success("Profile updated successfully!");
             setTimeout(() => router.push("/myprofile"), 1500);
         } catch (err) {
-            setError("Something went wrong. Please try again.");
+            toast.error("Something went wrong. Please try again.");
         } finally {
             setLoading(false);
         }
@@ -86,6 +84,19 @@ const UpdateProfilePage = () => {
                     Update Information
                 </h1>
 
+                {/* Live image preview */}
+                <div className="flex justify-center mb-6">
+                    <div className="w-20 h-20 rounded-xl overflow-hidden border-2 border-[#bcebeb] shadow bg-[#E0F2F1]">
+                        <img
+                            src={form.image || "https://placehold.co/80x80/E0F2F1/003D4C?text=?"}
+                            alt="Preview"
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                                e.target.src = "https://placehold.co/80x80/E0F2F1/003D4C?text=?";
+                            }}
+                        />
+                    </div>
+                </div>
 
                 <form onSubmit={handleSubmit} className="space-y-5">
                     {/* Name */}
@@ -109,7 +120,7 @@ const UpdateProfilePage = () => {
                         </label>
                     </div>
 
-                    {/* Image*/}
+                    {/* Image URL */}
                     <div className="form-control">
                         <label className="label pb-1">
                             <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">
@@ -129,20 +140,10 @@ const UpdateProfilePage = () => {
                         </label>
                     </div>
 
-                    {error && (
-                        <p className="text-sm text-red-500 font-medium">{error}</p>
-                    )}
-
-                    {success && (
-                        <p className="text-sm text-emerald-600 font-medium">
-                            ✓ Profile updated! Redirecting...
-                        </p>
-                    )}
-
                     <div className="pt-2">
                         <button
                             type="submit"
-                            disabled={loading || success}
+                            disabled={loading}
                             className="btn w-full bg-[#003D4C] text-white border-none hover:bg-[#002630] normal-case font-manrope font-semibold rounded-xl gap-2 disabled:opacity-60"
                         >
                             {loading ? (

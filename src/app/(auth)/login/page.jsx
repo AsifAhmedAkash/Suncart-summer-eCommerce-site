@@ -7,17 +7,15 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { authClient } from "@/lib/auth-client";
 import { useRouter } from "next/navigation";
+import { toast } from "react-toastify";
 
 const LoginPage = () => {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null);
     const router = useRouter();
 
     const handleLoginFunc = async (data) => {
-        console.log("Login form submitted");
         setLoading(true);
-        setError(null);
 
         const { data: res, error } = await authClient.signIn.email({
             email: data.email,
@@ -26,36 +24,31 @@ const LoginPage = () => {
             callbackURL: "/home",
         });
 
-        console.log("Sign-in response:", { data: res, error });
         setLoading(false);
 
         if (error) {
-            setError(error.message || "Invalid credentials.");
+            toast.error(error.message || "Invalid credentials.");
         } else {
+            toast.success("Welcome back!");
             router.push("/home");
         }
     };
 
     const handleGoogleSignin = async () => {
-        const data = await authClient.signIn.social({
-            provider: "google",
-        });
-        console.log("Google sign-in response:", data);
-
-    }
-
-    // For debugging: log form errors
-    console.log("Form errors:", errors);
+        try {
+            await authClient.signIn.social({ provider: "google" });
+        } catch (err) {
+            toast.error("Google sign-in failed. Try again.");
+        }
+    };
 
     return (
         <main className="min-h-screen flex items-center justify-center px-6 py-20 bg-[#f8fafa] relative overflow-hidden">
-            {/* Background blobs */}
             <div className="absolute top-[-10%] right-[-5%] w-96 h-96 bg-[#bcebeb]/20 rounded-full blur-3xl pointer-events-none" />
             <div className="absolute bottom-[-10%] left-[-5%] w-96 h-96 bg-[#baeafd]/20 rounded-full blur-3xl pointer-events-none" />
 
             <div className="w-full max-w-5xl grid md:grid-cols-2 gap-12 items-center z-10">
 
-                {/* Left - Image */}
                 <div className="hidden md:block rounded-2xl overflow-hidden aspect-[4/5] relative shadow-xl">
                     <img
                         src="https://lh3.googleusercontent.com/aida-public/AB6AXuBWQFrkRyAleDpIYBEHC8DB8Et3rCcBiDiPBbRAxpyl743DKts0mMMY-bMR4L_EW1bIxcqAyQESbV_eDvF-74cIjCHJ84ZQPCeQWGoQ-ifzMPkBmUiMVYgLZtYgz-2_2gWdxKW1j1jFxQrXYF_LinmB90kYl4eOCDjiNV0Ca4OY489Z8MtQHc9KSULUyZIikmbvmDtmAD94jkLKAd2DKkZA1Yfs6IVW3d1fZ_RzbTNyWRlmSKepTdbvO7vyUxiQrYwYbwc0sukk-xeA"
@@ -73,25 +66,20 @@ const LoginPage = () => {
                     </div>
                 </div>
 
-                {/* Right - Form */}
+
                 <div className="card bg-white border border-teal-50 shadow-sm rounded-2xl">
                     <div className="card-body p-8 md:p-10">
                         <div className="mb-8 text-center md:text-left">
                             <h1 className="text-4xl font-bold font-manrope text-[#003D4C] mb-2">
                                 Welcome Back
                             </h1>
-                            <p className="text-sm text-slate-500 mb-4">
+                            <p className="text-sm text-slate-500">
                                 Please enter your details to access your account.
                             </p>
-                            {error && (
-                                <div className="bg-red-50 text-red-500 p-3 rounded-lg text-sm font-semibold border border-red-100">
-                                    {error}
-                                </div>
-                            )}
                         </div>
 
                         <form onSubmit={handleSubmit(handleLoginFunc)} className="space-y-4">
-                            {/* Email */}
+
                             <div className="form-control">
                                 <label className="label pt-0 pb-1">
                                     <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">
@@ -112,7 +100,6 @@ const LoginPage = () => {
                                 )}
                             </div>
 
-                            {/* Password */}
                             <div className="form-control">
                                 <label className="label pt-0 pb-1">
                                     <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">
@@ -136,7 +123,6 @@ const LoginPage = () => {
                                 )}
                             </div>
 
-                            {/* Submit */}
                             <div className="pt-2">
                                 <button
                                     type="submit"
@@ -148,18 +134,18 @@ const LoginPage = () => {
                             </div>
                         </form>
 
-                        {/* Divider */}
                         <div className="divider text-[10px] font-bold uppercase tracking-widest text-slate-400 my-6">
                             Or continue with
                         </div>
 
-                        {/* Google */}
-                        <button onClick={handleGoogleSignin} className="btn btn-outline border-slate-200 hover:bg-slate-50 hover:border-slate-300 normal-case font-manrope font-semibold rounded-xl gap-3 text-[#002630] w-full">
+                        <button
+                            onClick={handleGoogleSignin}
+                            className="btn btn-outline border-slate-200 hover:bg-slate-50 hover:border-slate-300 normal-case font-manrope font-semibold rounded-xl gap-3 text-[#002630] w-full"
+                        >
                             <FcGoogle size={20} />
                             Continue with Google
                         </button>
 
-                        {/* Register link */}
                         <p className="mt-8 text-center text-sm text-slate-500">
                             Don&apos;t have an account?{" "}
                             <Link href="/register" className="text-[#396666] font-bold hover:underline">
