@@ -36,6 +36,14 @@ const LoginPage = () => {
         }
     };
 
+    const handleGoogleSignin = async () => {
+        const data = await authClient.signIn.social({
+            provider: "google",
+        });
+        console.log("Google sign-in response:", data);
+
+    }
+
     // For debugging: log form errors
     console.log("Form errors:", errors);
 
@@ -146,7 +154,7 @@ const LoginPage = () => {
                         </div>
 
                         {/* Google */}
-                        <button className="btn btn-outline border-slate-200 hover:bg-slate-50 hover:border-slate-300 normal-case font-manrope font-semibold rounded-xl gap-3 text-[#002630] w-full">
+                        <button onClick={handleGoogleSignin} className="btn btn-outline border-slate-200 hover:bg-slate-50 hover:border-slate-300 normal-case font-manrope font-semibold rounded-xl gap-3 text-[#002630] w-full">
                             <FcGoogle size={20} />
                             Continue with Google
                         </button>
