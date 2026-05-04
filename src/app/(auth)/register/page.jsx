@@ -37,6 +37,14 @@ const RegisterPage = () => {
         }
     };
 
+    const handleGoogleSignin = async () => {
+        const data = await authClient.signIn.social({
+            provider: "google",
+        });
+        console.log("Google sign-in response:", data);
+
+    }
+
     return (
         <main className="min-h-screen flex items-center justify-center px-6 py-20 bg-[#f8fafa]">
             <div className="w-full max-w-5xl grid md:grid-cols-2 bg-white rounded-2xl overflow-hidden border border-slate-100 shadow-sm">
@@ -177,7 +185,10 @@ const RegisterPage = () => {
                     </div>
 
                     {/* Google */}
-                    <button className="btn btn-outline border-slate-200 hover:bg-slate-50 hover:border-slate-300 normal-case font-manrope font-semibold rounded-xl gap-3 text-[#002630]">
+                    <button
+                        className="btn btn-outline border-slate-200 hover:bg-slate-50 hover:border-slate-300 normal-case font-manrope font-semibold rounded-xl gap-3 text-[#002630]"
+                        onClick={handleGoogleSignin}
+                    >
                         <FcGoogle size={20} />
                         Continue with Google
                     </button>
