@@ -19,4 +19,10 @@ export const auth = betterAuth({
         process.env.BETTER_AUTH_URL,
         process.env.NEXT_PUBLIC_APP_URL,
     ].filter(Boolean),
+    socialProviders: {
+        google: {
+            clientId: process.env.GOOGLE_CLIENT_ID,
+            clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+        },
+    },
 });

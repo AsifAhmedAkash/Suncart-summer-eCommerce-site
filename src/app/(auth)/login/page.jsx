@@ -36,6 +36,20 @@ const LoginPage = () => {
         }
     };
 
+    const handleGoogleLogin = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            await authClient.signIn.social({
+                provider: "google",
+                callbackURL: "/home",
+            });
+        } catch (err) {
+            setError(err.message || "Failed to sign in with Google.");
+            setLoading(false);
+        }
+    };
+
     return (
         <main className="min-h-screen flex items-center justify-center px-6 py-20 bg-[#f8fafa] relative overflow-hidden">
             {/* Background blobs */}
@@ -143,9 +157,13 @@ const LoginPage = () => {
                         </div>
 
                         {/* Google */}
-                        <button className="btn btn-outline border-slate-200 hover:bg-slate-50 hover:border-slate-300 normal-case font-manrope font-semibold rounded-xl gap-3 text-[#002630] w-full">
+                        <button 
+                            onClick={handleGoogleLogin}
+                            disabled={loading}
+                            className="btn btn-outline border-slate-200 hover:bg-slate-50 hover:border-slate-300 normal-case font-manrope font-semibold rounded-xl gap-3 text-[#002630] w-full disabled:opacity-70"
+                        >
                             <FcGoogle size={20} />
-                            Continue with Google
+                            {loading ? "Connecting..." : "Continue with Google"}
                         </button>
 
                         {/* Register link */}
