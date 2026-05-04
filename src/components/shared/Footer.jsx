@@ -11,7 +11,7 @@ import Link from "next/link";
 // Privacy policy
 
 const navLinks = [
-    { label: "Contact Us", href: "#" },
+    { label: "Contact Us", href: "https://portfolioasifahmed.vercel.app/" },
     { label: "Privacy Policy", href: "#" },
     { label: "Shipping Info", href: "#" },
     { label: "Terms of Service", href: "#" },

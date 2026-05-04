@@ -54,7 +54,7 @@ const heroSection = () => {
                                 Bio-available vitamins for daily resilience.
                             </p>
                         </div>
-                        <Link href="/home/allproducts" className="relative z-10 text-[#396666] font-semibold text-sm flex items-center gap-2 group w-fit hover:gap-3 transition-all">
+                        <Link href="#" className="relative z-10 text-[#396666] font-semibold text-sm flex items-center gap-2 group w-fit hover:gap-3 transition-all">
                             Explore Now{" "}
                             <FaArrowRight
                                 size={16}
@@ -76,7 +76,7 @@ const heroSection = () => {
                                 Mindful journaling for a peaceful start.
                             </p>
                         </div>
-                        <Link href="/home/allproducts" className="relative z-10 text-[#003D4C] font-semibold text-sm flex items-center gap-2 group w-fit hover:gap-3 transition-all">
+                        <Link href="#" className="relative z-10 text-[#003D4C] font-semibold text-sm flex items-center gap-2 group w-fit hover:gap-3 transition-all">
                             View Rituals{" "}
                             <FaArrowRight
                                 size={16}
